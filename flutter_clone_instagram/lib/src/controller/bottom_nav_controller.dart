@@ -1,18 +1,38 @@
+import 'package:flutter_clone_instagram/src/pages/Upload.dart';
 import 'package:get/get.dart';
 
 enum PageName { HOME, SEARCH, UPLOAD, ACTIVITY, MYPAGE }
 
 class BottomNavController extends GetxController {
   RxInt pageIndex = 0.obs;
+  List<int> bottomHistory = [0];
 
   void changeBottomNav(int value) {
-    pageIndex(value);
-    if (value == 0) {
-      //home event
-
+    var page = PageName.values[value];
+    switch (page) {
+      case PageName.UPLOAD:
+        Get.to(() => const Upload());
+        break;
+      case PageName.HOME:
+      case PageName.SEARCH:
+      case PageName.ACTIVITY:
+      case PageName.MYPAGE:
+        _changePage(value);
+        break;
     }
-    if (value == 1) {
-      //search event
+  }
+
+  void _changePage(int value) {
+    pageIndex(value);
+  }
+
+  Future<bool> willPopAction() async {
+    if (bottomHistory.length == 1) {
+      print('exit!');
+      return true;
+    } else {
+      print('goto before page!');
+      return false;
     }
   }
 }
